@@ -8,11 +8,16 @@ import java.util.stream.Collectors;
 public class Book {
     private final String title;
     private final int numberOfPages;
-    private final List<Author> authors = new ArrayList<>();
+    private final List<Author> authors;
 
     public Book(String title, int numberOfPages) {
+        this(title, numberOfPages, new ArrayList<>());
+    }
+
+    public Book(String title, int numberOfPages, List<Author> authors) {
         this.title = title;
         this.numberOfPages = numberOfPages;
+        this.authors = new ArrayList<>(authors);
     }
 
     public String title() {

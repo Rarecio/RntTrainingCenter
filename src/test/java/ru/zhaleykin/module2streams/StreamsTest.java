@@ -80,22 +80,16 @@ public class StreamsTest {
                         .comparingInt(Book::numberOfPages)
                         .thenComparing(Book::title))
                 .collect(Collectors.toList());
-        for (int i = 1; i < result.size(); i++) {
-            if (result.get(i - 1).numberOfPages() < result.get(i).numberOfPages()){
-                assert true;
-            } else if (result.get(i - 1).numberOfPages() == result.get(i).numberOfPages()) {
-                assertTrue(result.get(i - 1).title().compareTo(result.get(i).title()) <= 0);
-            }
-        }
+        System.out.println(result);
+        assertEquals(result, booksSortedByNumberOfPagesAndTitleResult());
     }
 
     @Test
     public void allTitles(){
-        List<String> titles = Arrays.stream(books)
+        Set<String> titles = Arrays.stream(books)
                 .map(Book::title)
-                .collect(Collectors.toList());
-
-        assertEquals(titles, Arrays.asList("book 1", "book 2", "book 3", "book 4"));
+                .collect(Collectors.toSet());
+        assertEquals(titles, new HashSet<>(Arrays.asList("book 1", "book 2", "book 3", "book 4")));
     }
 
     @Test
@@ -108,13 +102,10 @@ public class StreamsTest {
 
     @Test
     public void allAuthors(){
-        List<Author> authorList = Arrays.stream(books)
+        Set<Author> authorSet = Arrays.stream(books)
                 .flatMap(book -> book.authors().stream())
-                .distinct()
-                .collect(Collectors.toList());
-        for (Author author : authors) {
-            assertTrue(authorList.contains(author));
-        }
+                .collect(Collectors.toSet());
+        assertTrue(authorSet.containsAll(Arrays.asList(authors)));
     }
 
     @Test
@@ -174,7 +165,6 @@ public class StreamsTest {
     @Test
     public void collectorTestWithEmptyMap(){
         List<SomeEntity> list = new ArrayList<>();
-        Random r = new Random();
         for (int i = 0; i < 10; i++)
             list.add(getRandomSomeEntity(Collections::emptyMap));
 
@@ -193,10 +183,12 @@ public class StreamsTest {
         }
     }
 
-    private static SomeEntity getRandomSomeEntity(Supplier<Map<Property, Boolean>> supplier) {
-        Random r = new Random();
-        return new SomeEntity(r.nextInt(), "qwe", r.nextBoolean(), supplier.get());
+    private SomeEntity getRandomSomeEntity(Supplier<Map<Property, Boolean>> supplier) {
+        return new SomeEntity(supplier.get());
     }
 
+    private List<Book> booksSortedByNumberOfPagesAndTitleResult(){
+        return Arrays.asList(books[1], books[3], books[0], books[2]);
+    }
 
 }

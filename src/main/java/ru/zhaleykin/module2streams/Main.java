@@ -1,7 +1,6 @@
 package ru.zhaleykin.module2streams;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
@@ -28,8 +27,6 @@ public class Main {
             System.out.println(property + ": true=" + t + ", false=" + f);
         }
         System.out.println(result);
-
-
     }
 
     private static SomeEntity getRandomSomeEntity() {
@@ -39,7 +36,6 @@ public class Main {
         for (int i = 0; i < len; i++) {
             props.put(Property.values()[r.nextInt(Property.values().length)], r.nextBoolean());
         }
-        props = new HashMap<>();
-        return new SomeEntity(r.nextInt(), "qwe", r.nextBoolean(), props);
+        return new SomeEntity(props);
     }
 }
