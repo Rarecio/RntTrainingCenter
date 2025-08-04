@@ -21,7 +21,8 @@ import static org.junit.Assert.assertEquals;
 
 public class ParserTest {
 
-    private final File xmlFile = new File("D:\\RntTrainingCenter\\hamlet.xml");
+    private final File xmlFile = new File("src/main/resources/hamlet.xml");
+    private final Path csvFile = Paths.get("src/main/resources/output.csv");
 
     @Test
     public void testSAXParser() throws ParserConfigurationException, SAXException, IOException {
@@ -29,9 +30,6 @@ public class ParserTest {
         SAXParser saxParser = factory.newSAXParser();
         MySAXHandler handler = new MySAXHandler();
         saxParser.parse(xmlFile, handler);
-
-
-        Path csvFile = Paths.get("D:\\RntTrainingCenter\\output.csv");
 
         List<String> result = handler.tagPopularity.entrySet().stream()
                 .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
@@ -57,7 +55,7 @@ public class ParserTest {
         Map<String, Integer> map = new HashMap<>();
         recursiveNodeName(doc, map);
         assertEquals(map, tagPopularity());
-        Path csvFile = Paths.get("D:\\RntTrainingCenter\\output.csv");
+
         List<String> result = map.entrySet().stream()
                 .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
                 .map(entry -> String.format("%10s : %s", entry.getKey(), entry.getValue()))
